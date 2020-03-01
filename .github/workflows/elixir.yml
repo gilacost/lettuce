@@ -1,0 +1,38 @@
+name: Elixir CI
+
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Elixir ${{matrix.elixir}} / OTP ${{matrix.otp}}
+
+    strategy:
+      matrix:
+        otp: [22.x]
+        elixir: [1.9.x]
+
+    env:
+      MIX_ENV: test
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v1.0.0
+      - uses: actions/setup-elixir@v1.0.0
+        with:
+          otp-version: ${{matrix.otp}}
+          elixir-version: ${{matrix.elixir}}
+
+      - name: Install Dependencies
+        run: |
+          mix local.rebar --force
+          mix local.hex --force
+          mix deps.get
+
+      - name: Check Formatting
+        run: mix format --check-formatted
+
+      - name: Run Tests
+        run: mix test
+
+      - name: Check Typespec
+        run: mix dialyzer --halt-exit-status
