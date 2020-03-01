@@ -10,11 +10,11 @@ defmodule Lettuce.MixProject do
       build_embedded: Mix.env() == :prod,
       deps: deps(),
       description: """
-          Lettuce is a generic server process that checks the files within an elixir
-          project that has lettuce as a dependency and then runs `iex -S mix`. It
-          initialises the state gen server with the `.ex` files inside `lib` and their
-          last modified time. By default `lib` is used but you specify which folders you
-          want to be watched.
+      Lettuce checks the files within an elixir project that has lettuce as
+      a dependency and then runs `iex -S mix`. It initialises the state of a
+      generic server with the `.ex` files inside `lib` and their last modified
+      time. By default `lib` is used but you specify which folders you want to
+      be watched.
       """,
       package: package(),
       dialyzer: [plt_add_deps: :apps_direct],

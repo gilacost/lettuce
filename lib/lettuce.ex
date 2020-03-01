@@ -3,9 +3,9 @@ defmodule Lettuce do
 
   Lettuce is a generic server process that checks the files within an elixir
   project that has lettuce as a dependency and then runs `iex -S mix`. It
-  initialises the state gen server with the `.ex` files inside `lib` and their
-  last modified time. By default `lib` is used but you specify which folders you
-  want to be watched.
+  initialises the state of the generic server with the `.ex` files inside `lib`
+  and their last modified time. By default `lib` is used but you may specify
+  which folders you want to be watched.
 
   ## Configuration example
 
