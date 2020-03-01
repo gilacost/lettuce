@@ -6,7 +6,7 @@ initialises the state gen server with the `.ex` files inside `lib` and their
 last modified time. By default `lib` is used but you specify which folders you
 want to be watched.
 
-![Elixir CI status](https://github.com/gilacost/lettuce/workflows/Elixir%20CI/badge.svg)
+![Elixir CI status](https://github.com/gilacost/lettuce/workflows/Elixir%20CI/badge.svg)&nbsp;![Hex version badge](https://img.shields.io/hexpm/v/lettuce.svg)
 
 ## Installation
 
