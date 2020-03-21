@@ -39,6 +39,7 @@ defmodule Lettuce do
   require Logger
   use GenServer
   alias Lettuce.Config
+  alias Mix.Tasks.Compile.Elixir, as: Compiler
 
   @refresh_time Config.refresh_time()
 
@@ -60,23 +61,24 @@ defmodule Lettuce do
 
   @impl true
   def handle_info(:project_review, state) do
-    state
-    |> List.myers_difference(project_files())
-    |> length()
-    |> restart_system()
+    new_state =
+      state
+      |> List.myers_difference(project_files())
+      |> length()
+      |> recompile()
 
     schedule_check()
-    {:noreply, state}
+    {:noreply, new_state}
   end
 
   defp schedule_check(), do: Process.send_after(self(), :project_review, @refresh_time)
 
-  defp restart_system(len) when len != 1 do
-    Logger.info("System being restarted...")
-    System.restart()
+  defp recompile(len) when len != 1 do
+    Compiler.run(["--ignore-module-conflict", "--verbose"])
+    project_files()
   end
 
-  defp restart_system(_), do: nil
+  defp recompile(_), do: project_files()
 
   defp project_files() do
     Enum.map(Config.folders_to_watch(), &folder_files/1)
