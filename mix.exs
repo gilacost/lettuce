@@ -4,20 +4,22 @@ defmodule Lettuce.MixProject do
   def project do
     [
       app: :lettuce,
-      version: "0.1.1",
+      version: "0.1.2",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
       build_embedded: Mix.env() == :prod,
       deps: deps(),
       description: """
-      Lettuce checks the files within an elixir project that has lettuce as
-      a dependency and then runs `iex -S mix`. It initialises the state of a
+      Lettuce checks the files within an elixir project and then runs `iex -S mix`. It initialises the state of a
       generic server with the `.ex` files inside `lib` and their last modified
-      time. By default `lib` is used but you specify which folders you want to
+      time. By default `lib` is used but you can specify which folders you want to
       be watched.
       """,
       package: package(),
-      dialyzer: [plt_add_deps: :apps_direct],
+      dialyzer: [
+        plt_add_deps: [:apps_direct],
+        plt_add_apps: [:mix]
+      ],
       docs: [
         main: "readme",
         extras: ["README.md"]
