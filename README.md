@@ -75,8 +75,9 @@ details.
 
 ## Todo
 
-[] all elixir run parameters as options
-[] capture io as silent
-[] test everything
-[] dialyzer
-[] use option parser
+- [ ] all elixir run parameters as options
+- [ ] capture io as silent
+- [ ] test everything
+- [ ] dialyzer
+- [ ] use option parser
+- [ ] caching plts in github actions

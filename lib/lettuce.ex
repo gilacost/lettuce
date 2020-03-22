@@ -74,7 +74,8 @@ defmodule Lettuce do
   defp schedule_check(), do: Process.send_after(self(), :project_review, @refresh_time)
 
   defp recompile(len) when len != 1 do
-    Compiler.run(["--ignore-module-conflict", "--verbose"])
+    opts = ["--ignore-module-conflict", "--verbose"]
+    Compiler.run(opts)
     project_files()
   end
 
