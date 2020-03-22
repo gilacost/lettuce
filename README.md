@@ -73,10 +73,10 @@ Josep Lluis Giralt D'Lacoste.
 Lettuce is released under the MIT License. See the LICENSE file for further
 details.
 
-
 ## Todo
 
 [] all elixir run parameters as options
 [] capture io as silent
 [] test everything
 [] dialyzer
+[] use option parser
