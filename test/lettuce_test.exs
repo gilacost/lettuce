@@ -5,6 +5,18 @@ defmodule LettuceTest do
 
   @ebin_path "_build/test/lib/project/ebin/"
   @compiled_file_pattern "Elixir.{{project}}.{{module_file}}.beam"
+  setup do
+    full_path = "test/fixtures/#{@ebin_path}"
+    File.mkdir_p!(full_path)
+
+    "Project"
+    |> file_name_for_project("ModuleInFile", "test/fixtures/")
+    |> File.touch!()
+
+    on_exit(fn ->
+      File.rm_rf!("test/fixtures/_build")
+    end)
+  end
 
   test "recompiles the project if a file is touched" do
     compiled_file = file_name_for_project("Project", "ModuleInFile")
@@ -29,8 +41,9 @@ defmodule LettuceTest do
     end)
   end
 
-  defp file_name_for_project(project, module_file) do
-    @ebin_path
+  defp file_name_for_project(project, module_file, prepend \\ "") do
+    prepend
+    |> Kernel.<>(@ebin_path)
     |> Kernel.<>(@compiled_file_pattern)
     |> String.replace("{{project}}", project)
     |> String.replace("{{module_file}}", module_file)
