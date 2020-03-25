@@ -75,9 +75,11 @@ details.
 
 ## Todo
 
-- [ ] all elixir run parameters as options
 - [ ] capture io as silent
-- [ ] test everything
+- [ ] all elixir run parameters as options
+- [x] test everything
 - [ ] dialyzer
 - [ ] use option parser
 - [ ] caching plts in github actions
+- [ ] code coverage?
+- [ ] package publishing when tagging?
