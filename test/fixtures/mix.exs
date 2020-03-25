@@ -12,7 +12,7 @@ defmodule Project.Mixfile do
 
   def application do
     [
-      extra_applications: [:lettuce, :logger]
+      extra_applications: [:lettuce]
     ]
   end
 end
