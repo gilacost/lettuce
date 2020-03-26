@@ -17,6 +17,25 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1.0.0
+
+      - name: Cache Dependecies
+        id: cache-deps
+        uses: actions/cache@v1
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+          restore-keys: |
+            ${{ runner.os }}-mix-
+
+      - name: Cache Dialyzer PLTs
+        id: cache-plts
+        uses: actions/cache@v1
+        with:
+          path: priv/plts
+          key: ${{ runner.os }}-plts
+          restore-keys: |
+            ${{ runner.os }}-plts
+
       - uses: actions/setup-elixir@v1.0.0
         with:
           otp-version: ${{matrix.otp}}
