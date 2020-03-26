@@ -84,4 +84,4 @@ details.
 - [ ] all elixir run parameters as options
 - [ ] code coverage
 - [ ] package publishing when tagging
-- [ ] how it works (gif)
+- [ ] how it works

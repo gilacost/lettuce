@@ -1,40 +1,37 @@
 name: Elixir CI
 
-on: push
+env:
+  ELIXIR_VERSION: 1.9.4
+  OTP_VERSION: 22.2
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
-    container:
-      image: elixir:1.9.4
-
     steps:
-      - uses: actions/checkout@v1.0.0
-
-      - name: Cache Dependecies
-        id: cache-deps
-        uses: actions/cache@v1
+      - uses: actions/checkout@v2
+      - name: Setup elixir
+        uses: actions/setup-elixir@v1
         with:
-          path: deps
-          key: ${{ runner.os }}-mix-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
-          restore-keys: |
-            ${{ runner.os }}-mix-
+          elixir-version: ${{ env.ELIXIR_VERSION }} # Define the elixir version [required]
+          otp-version: ${{ env.OTP_VERSION }} # Define the OTP version [required]
 
-      - name: Cache Dialyzer PLTs
-        id: cache-plts
-        uses: actions/cache@v1
+      - name: Cache
+        uses: actions/cache@v1.1.2
         with:
           path: priv/plts
-          key: ${{ runner.os }}-plts
+          key: plts-v${{ env.ELIXIR_VERSION }}-otp-${{ env.OTP_VERSION }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-plts
+            plts-v${{ env.ELIXIR_VERSION }}-otp-${{ env.OTP_VERSION }}-
 
       - name: Install Dependencies
-        run: |
-          mix local.rebar --force
-          mix local.hex --force
-          mix deps.get
+        run: mix deps.get
 
       - name: Check Formatting
         run: mix format --check-formatted
