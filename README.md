@@ -75,11 +75,13 @@ details.
 
 ## Todo
 
-- [ ] capture io as silent
-- [ ] all elixir run parameters as options
 - [x] test everything
-- [ ] dialyzer
+- [x] dialyzer
+- [x] erlang time type for dyalizer
+- [x] caching plts in github actions
+- [ ] capture io as silent
 - [ ] use option parser
-- [ ] caching plts in github actions
-- [ ] code coverage?
-- [ ] package publishing when tagging?
+- [ ] all elixir run parameters as options
+- [ ] code coverage
+- [ ] package publishing when tagging
+- [ ] how it works (gif)

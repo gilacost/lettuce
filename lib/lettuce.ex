@@ -36,6 +36,7 @@ defmodule Lettuce do
       defp extra_applications(_, default), do: default
 
   """
+
   require Logger
   use GenServer
   alias Lettuce.Config
@@ -71,8 +72,10 @@ defmodule Lettuce do
     {:noreply, new_state}
   end
 
+  @spec schedule_check :: reference
   defp schedule_check(), do: Process.send_after(self(), :project_review, @refresh_time)
 
+  @spec recompile(integer) :: [String.t()]
   defp recompile(len) when len != 1 do
     opts = ["--ignore-module-conflict", "--verbose"]
     Compiler.run(opts)
@@ -81,16 +84,21 @@ defmodule Lettuce do
 
   defp recompile(_), do: project_files()
 
+  @spec project_files() :: [String.t()]
   defp project_files() do
     Enum.map(Config.folders_to_watch(), &folder_files/1)
   end
 
+  @type file_last_modified :: {String.t(), File.erlang_time()}
+
+  @spec folder_files(String.t()) :: [file_last_modified]
   defp folder_files(folder) do
     "#{File.cwd!()}/#{folder}/**/*.ex"
     |> Path.wildcard()
     |> Enum.map(&put_mtime/1)
   end
 
+  @spec put_mtime(String.t()) :: file_last_modified
   defp put_mtime(file) do
     %File.Stat{mtime: mtime} = File.lstat!(file)
     {file, mtime}

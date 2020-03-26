@@ -4,7 +4,7 @@ defmodule Lettuce.MixProject do
   def project do
     [
       app: :lettuce,
-      version: "0.1.3",
+      version: "0.1.4",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
       build_embedded: Mix.env() == :prod,
@@ -18,7 +18,8 @@ defmodule Lettuce.MixProject do
       package: package(),
       dialyzer: [
         plt_add_deps: [:apps_direct],
-        plt_add_apps: [:mix]
+        plt_add_apps: [:mix],
+        plt_file: {:no_warn, "priv/plts/dialyzer.plt"}
       ],
       docs: [
         main: "readme",

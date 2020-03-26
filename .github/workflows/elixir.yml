@@ -1,19 +1,13 @@
 name: Elixir CI
 
 on: push
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Elixir ${{matrix.elixir}} / OTP ${{matrix.otp}}
 
-    strategy:
-      matrix:
-        otp: [22.x]
-        elixir: [1.9.x]
-
-    env:
-      MIX_ENV: test
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    container:
+      image: elixir:1.9.4
 
     steps:
       - uses: actions/checkout@v1.0.0
@@ -35,11 +29,6 @@ jobs:
           key: ${{ runner.os }}-plts
           restore-keys: |
             ${{ runner.os }}-plts
-
-      - uses: actions/setup-elixir@v1.0.0
-        with:
-          otp-version: ${{matrix.otp}}
-          elixir-version: ${{matrix.elixir}}
 
       - name: Install Dependencies
         run: |
