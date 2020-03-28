@@ -3,28 +3,34 @@ defmodule LettuceTest do
 
   doctest Lettuce.Config
 
-  @ebin_path "_build/test/lib/project/ebin/"
-  @compiled_file_pattern "Elixir.{{project}}.{{module_file}}.beam"
-  setup do
-    full_path = "test/fixtures/#{@ebin_path}"
-    File.mkdir_p!(full_path)
+  @ebin_path "_build/test/lib/{{project}}/ebin/"
+  @compiled_file_pattern "Elixir.{{Project}}.{{module_file}}.beam"
+  @fixture_projects ["recompile"]
 
-    "Project"
-    |> file_name_for_project("ModuleInFile", "test/fixtures/")
-    |> File.touch!()
+  setup do
+    @fixture_projects
+    |> Enum.map(fn project ->
+      project
+      |> fixtures_full_path
+      |> File.mkdir_p!()
+
+      project
+      |> beam_file("ModuleFile", "test/fixtures/recompile/")
+      |> File.touch!()
+    end)
 
     on_exit(fn ->
-      File.rm_rf!("test/fixtures/_build")
+      File.rm_rf!("test/fixtures/*/_build")
     end)
   end
 
   test "recompiles the project if a file is touched" do
-    compiled_file = file_name_for_project("Project", "ModuleInFile")
+    compiled_file = beam_file("Recompile", "ModuleFile")
 
-    Mix.Project.in_project(:project, "test/fixtures", fn _module ->
+    Mix.Project.in_project(:project, "test/fixtures/recompile", fn _module ->
       init_mod_time = modification_time(compiled_file)
 
-      File.touch!("lib/module_in_file.ex")
+      File.touch!("lib/module_file.ex")
       Process.sleep(2000)
 
       assert init_mod_time != modification_time(compiled_file)
@@ -32,20 +38,21 @@ defmodule LettuceTest do
   end
 
   test "does notihing if non file is touched" do
-    compiled_file = file_name_for_project("Project", "ModuleInFile")
+    compiled_file = beam_file("Recompile", "ModuleFile")
 
-    Mix.Project.in_project(:project, "test/fixtures", fn _module ->
+    Mix.Project.in_project(:project, "test/fixtures/recompile", fn _module ->
       init_mod_time = modification_time(compiled_file)
 
       assert init_mod_time == modification_time(compiled_file)
     end)
   end
 
-  defp file_name_for_project(project, module_file, prepend \\ "") do
+  defp beam_file(project, module_file, prepend \\ "") do
     prepend
     |> Kernel.<>(@ebin_path)
     |> Kernel.<>(@compiled_file_pattern)
-    |> String.replace("{{project}}", project)
+    |> String.replace("{{Project}}", project)
+    |> String.replace("{{project}}", String.downcase(project))
     |> String.replace("{{module_file}}", module_file)
   end
 
@@ -53,5 +60,10 @@ defmodule LettuceTest do
     path
     |> File.lstat!()
     |> Map.get(:mtime)
+  end
+
+  defp fixtures_full_path(project) do
+    fixtures_path = "test/fixtures/{{project}}/#{@ebin_path}"
+    String.replace(fixtures_path, "{{project}}", project)
   end
 end
