@@ -35,7 +35,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: priv/plts
-          key: plts-v${{ env.ELIXIR_VERSION }}-otp-${{ env.OTP_VERSION }}-${{ github.sha }}
+          key: plts-${{ env.MIX_ENV }}-v${{ env.ELIXIR_VERSION }}-otp-${{ env.OTP_VERSION }}-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
           restore-keys: |
             plts-v${{ env.ELIXIR_VERSION }}-otp-${{ env.OTP_VERSION }}-
 

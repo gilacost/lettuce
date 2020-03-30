@@ -15,7 +15,7 @@ defmodule LettuceTest do
       |> File.mkdir_p!()
 
       project
-      |> beam_file("ModuleFile", "test/fixtures/recompile/")
+      |> beam_file("ModuleFile", "test/fixtures/#{project}/")
       |> File.touch!()
     end)
 
@@ -26,15 +26,7 @@ defmodule LettuceTest do
 
   test "recompiles the project if a file is touched" do
     compiled_file = beam_file("Recompile", "ModuleFile")
-
-    Mix.Project.in_project(:project, "test/fixtures/recompile", fn _module ->
-      init_mod_time = modification_time(compiled_file)
-
-      File.touch!("lib/module_file.ex")
-      Process.sleep(2000)
-
-      assert init_mod_time != modification_time(compiled_file)
-    end)
+    touch_in_project(recompile, compiled_file)
   end
 
   test "does notihing if non file is touched" do
@@ -65,5 +57,18 @@ defmodule LettuceTest do
   defp fixtures_full_path(project) do
     fixtures_path = "test/fixtures/{{project}}/#{@ebin_path}"
     String.replace(fixtures_path, "{{project}}", project)
+  end
+
+  defp touch_in_project(project, beam_file) do
+    project
+    |> String.to_existing_atom()
+    |> Mix.Project.in_project("test/fixtures/#{project}", fn _module ->
+      initial_mod_time = modification_time(beam_file)
+
+      File.touch!("lib/module_file.ex")
+      Process.sleep(2000)
+
+      assert inittial_mod_time != modification_time(beam_file)
+    end)
   end
 end
