@@ -22,8 +22,17 @@ jobs:
           elixir-version: ${{ env.ELIXIR_VERSION }} # Define the elixir version [required]
           otp-version: ${{ env.OTP_VERSION }} # Define the OTP version [required]
 
-      - name: Cache
-        uses: actions/cache@v1.1.2
+      - name: Cache Dependencies
+        uses: actions/cache@v1
+        id: cache-deps
+        with:
+          path: deps
+          key: deps-${{ env.MIX_ENV }}-v${{ env.ELIXIR_VERSION }}-otp-${{ env.OTP_VERSION }}-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+          restore-keys: |
+            deps-${{ env.MIX_ENV }}-v${{ env.ELIXIR_VERSION }}-otp-${{ env.OTP_VERSION }}-
+
+      - name: Cache Dialyzer PLTs
+        uses: actions/cache@v1
         with:
           path: priv/plts
           key: plts-v${{ env.ELIXIR_VERSION }}-otp-${{ env.OTP_VERSION }}-${{ github.sha }}
