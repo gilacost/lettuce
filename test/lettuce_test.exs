@@ -7,26 +7,35 @@ defmodule LettuceTest do
   @compiled_file_pattern "Elixir.{{Project}}.{{module_file}}.beam"
   @fixture_projects ["recompile"]
 
-  setup do
-    @fixture_projects
-    |> Enum.map(fn project ->
-      project
-      |> fixtures_full_path
-      |> File.mkdir_p!()
+  setup_all do
+    files_mtime =
+      @fixture_projects
+      |> Enum.map(fn project ->
+        project
+        |> fixtures_full_path
+        |> File.mkdir_p!()
 
-      project
-      |> beam_file("ModuleFile", "test/fixtures/#{project}/")
-      |> File.touch!()
-    end)
+        beam_file = beam_file(project, "ModuleFile", "test/fixtures/#{project}/")
+        File.touch!(beam_file)
+        {"#{beam_file}", modification_time(beam_file)}
+      end)
+      |> Enum.into(%{})
 
     on_exit(fn ->
-      File.rm_rf!("test/fixtures/*/_build")
+      @fixture_projects
+      |> Enum.each(fn project ->
+        "test/fixtures/{{project}}/_build"
+        |> String.replace("{{project}}", project)
+        |> File.rm_rf!()
+      end)
     end)
+
+    %{files_mtime: files_mtime}
   end
 
-  test "recompiles the project if a file is touched" do
+  test "recompiles the project if a file is touched", %{files_mtime: files_mtime} do
     compiled_file = beam_file("Recompile", "ModuleFile")
-    touch_in_project(recompile, compiled_file)
+    touch_in_project(files_mtime, "recompile", compiled_file)
   end
 
   test "does notihing if non file is touched" do
@@ -59,16 +68,16 @@ defmodule LettuceTest do
     String.replace(fixtures_path, "{{project}}", project)
   end
 
-  defp touch_in_project(project, beam_file) do
+  defp touch_in_project(initial_times, project, beam_file) do
     project
     |> String.to_existing_atom()
-    |> Mix.Project.in_project("test/fixtures/#{project}", fn _module ->
-      initial_mod_time = modification_time(beam_file)
+    |> Mix.Project.in_project("test/fixtures/#{project}", fn module ->
+      IO.puts("Project: #{project} \n Module: #{module}")
 
-      File.touch!("lib/module_file.ex")
       Process.sleep(2000)
+      File.touch!("lib/module_file.ex")
 
-      assert inittial_mod_time != modification_time(beam_file)
+      assert Map.get(initial_times, "#{beam_file}") != modification_time(beam_file)
     end)
   end
 end
