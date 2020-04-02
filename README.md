@@ -80,11 +80,12 @@ details.
 - [x] erlang time type for dyalizer
 - [x] caching plts in github actions
 - [x] pass the initial time from the setup to fix the flaky test
-- [ ] capture io as silent
-- [ ] all elixir run parameters as options
-- [ ] code coverage
+- [x] capture log with silent
 
-- [ ] use option parser
+- [ ] code coverage
+- [ ] all elixir run parameters as options
+
 - [ ] remove redefined module warning
+- [ ] use option parser
 - [ ] package publishing when tagging
 - [ ] how it works
