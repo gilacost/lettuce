@@ -54,8 +54,11 @@ defmodule Lettuce do
 
   @impl true
   def init(_) do
-    Logger.info("current directory: #{File.cwd!()}")
-    Logger.info("watching folders: #{inspect(Config.folders_to_watch())}")
+    unless Config.silent?() do
+      Logger.info("current directory: #{File.cwd!()}")
+      Logger.info("watching folders: #{inspect(Config.folders_to_watch())}")
+    end
+
     schedule_check()
     {:ok, project_files()}
   end
@@ -77,6 +80,10 @@ defmodule Lettuce do
 
   @spec recompile(integer) :: [String.t()]
   defp recompile(len) when len != 1 do
+    unless Config.silent?() do
+      Logger.info("recompiling...")
+    end
+
     opts = ["--ignore-module-conflict", "--verbose"]
     Compiler.run(opts)
     project_files()
