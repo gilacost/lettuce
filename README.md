@@ -6,7 +6,7 @@ initialises the state of the generic server with the `.ex` files inside `lib`
 and their last modified time. By default `lib` is used but you may specify which
 folders you want to be watched.
 
-![Elixir CI status](https://github.com/gilacost/lettuce/workflows/Elixir%20CI/badge.svg)&nbsp;![Hex version badge](https://img.shields.io/hexpm/v/lettuce.svg)
+![Elixir CI status](https://github.com/gilacost/lettuce/workflows/Elixir%20CI/badge.svg)&nbsp;![Hex version badge](https://img.shields.io/hexpm/v/lettuce.svg)&nbsp;[![codecov](https://codecov.io/gh/gilacost/lettuce/branch/master/graph/badge.svg)](https://codecov.io/gh/gilacost/lettuce)
 
 ## Installation
 
@@ -81,11 +81,9 @@ details.
 - [x] caching plts in github actions
 - [x] pass the initial time from the setup to fix the flaky test
 - [x] capture log with silent
-
-- [ ] code coverage
+- [x] remove redefined module warning
+- [x] code coverage
 - [ ] all elixir run parameters as options
-
-- [ ] remove redefined module warning
 - [ ] use option parser
 - [ ] package publishing when tagging
 - [ ] how it works

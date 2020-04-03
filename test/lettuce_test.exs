@@ -87,8 +87,7 @@ defmodule LettuceTest do
   defp touch_in_project(initial_times, project, beam_file) do
     project
     |> String.to_existing_atom()
-    |> Mix.Project.in_project("test/fixtures/#{project}", fn module ->
-      IO.puts("Project: #{project} \n Module: #{module}")
+    |> Mix.Project.in_project("test/fixtures/#{project}", fn _module ->
       Mix.Tasks.Loadconfig.run(["config/config.exs"])
 
       Process.sleep(2000)
