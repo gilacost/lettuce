@@ -41,4 +41,20 @@ defmodule Lettuce.Config do
   def silent?() do
     Application.get_env(:lettuce, :silent?, false)
   end
+
+  defmodule Compiler do
+    defstruct verbose: :boolean,
+              force: :boolean,
+              ignore_module_conflict: :boolean,
+              warnings_as_conflict: :boolean,
+              elixirc_paths: :list
+
+    def options() do
+      Application.get_env(:lettuce, :compiler_opts, ["--verbose"])
+    end
+
+    def validations() do
+      %__MODULE__{} |> Map.from_struct() |> Map.to_list()
+    end
+  end
 end

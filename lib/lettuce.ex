@@ -37,12 +37,16 @@ defmodule Lettuce do
 
   """
 
-  require Logger
   use GenServer
+  require Logger
+
   alias Lettuce.Config
   alias Mix.Tasks.Compile.Elixir, as: Compiler
 
   @refresh_time Config.refresh_time()
+
+  @opts Config.Compiler.options()
+  @validations Config.Compiler.validations()
 
   @doc false
   @spec start_link(list) :: {:ok, pid} | {:error, term}
@@ -84,8 +88,8 @@ defmodule Lettuce do
       Logger.info("recompiling...")
     end
 
-    opts = ["--ignore-module-conflict", "--verbose"]
-    Compiler.run(opts)
+    OptionParser.parse!(@opts, strict: @validations)
+    Compiler.run(@opts)
     project_files()
   end
 
