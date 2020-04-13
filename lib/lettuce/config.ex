@@ -43,6 +43,8 @@ defmodule Lettuce.Config do
   end
 
   defmodule Compiler do
+    @default ["--verbose", "--ignore-module-conflict"]
+
     defstruct verbose: :boolean,
               force: :boolean,
               docs: :boolean,
@@ -50,8 +52,9 @@ defmodule Lettuce.Config do
               warnings_as_errors: :boolean
 
     def options() do
-      default = ["--verbose", "--ignore-module-conflict"]
-      Application.get_env(:lettuce, :compiler_opts, default)
+      opts = Application.get_env(:lettuce, :compiler_opts, @default)
+      OptionParser.parse!(opts, strict: validations())
+      opts
     end
 
     def validations() do

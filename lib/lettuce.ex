@@ -85,7 +85,6 @@ defmodule Lettuce do
 
     opts = Config.Compiler.options()
 
-    OptionParser.parse!(opts, strict: Config.Compiler.validations())
     Compiler.run(opts)
     project_files()
   end
