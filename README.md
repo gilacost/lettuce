@@ -72,18 +72,3 @@ Josep Lluis Giralt D'Lacoste.
 
 Lettuce is released under the MIT License. See the LICENSE file for further
 details.
-
-## Todo
-
-- [x] test everything
-- [x] dialyzer
-- [x] erlang time type for dyalizer
-- [x] caching plts in github actions
-- [x] pass the initial time from the setup to fix the flaky test
-- [x] capture log with silent
-- [x] remove redefined module warning
-- [x] code coverage
-- [ ] all elixir run parameters as options
-- [ ] use option parser
-- [ ] package publishing when tagging
-- [ ] how it works

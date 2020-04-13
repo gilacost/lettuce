@@ -44,7 +44,6 @@ defmodule Lettuce.Config do
 
   defmodule Compiler do
     @default ["--verbose", "--ignore-module-conflict"]
-
     defstruct verbose: :boolean,
               force: :boolean,
               docs: :boolean,
@@ -54,10 +53,11 @@ defmodule Lettuce.Config do
     def options() do
       opts = Application.get_env(:lettuce, :compiler_opts, @default)
       OptionParser.parse!(opts, strict: validations())
+
       opts
     end
 
-    def validations() do
+    defp validations() do
       %__MODULE__{} |> Map.from_struct() |> Map.to_list()
     end
   end

@@ -43,6 +43,9 @@ defmodule Lettuce do
   alias Lettuce.Config
   alias Mix.Tasks.Compile.Elixir, as: Compiler
 
+  @refresh_time Config.refresh_time()
+  @opts Config.Compiler.options()
+
   @doc false
   @spec start_link(list) :: {:ok, pid} | {:error, term}
   def start_link(_) do
@@ -75,7 +78,7 @@ defmodule Lettuce do
   end
 
   @spec schedule_check :: reference
-  defp schedule_check(), do: Process.send_after(self(), :project_review, Config.refresh_time())
+  defp schedule_check(), do: Process.send_after(self(), :project_review, @refresh_time)
 
   @spec recompile(integer) :: [String.t()]
   defp recompile(len) when len != 1 do
@@ -83,9 +86,7 @@ defmodule Lettuce do
       Logger.info("recompiling...")
     end
 
-    opts = Config.Compiler.options()
-
-    Compiler.run(opts)
+    Compiler.run(@opts)
     project_files()
   end
 

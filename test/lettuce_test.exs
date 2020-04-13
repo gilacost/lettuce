@@ -40,11 +40,6 @@ defmodule LettuceTest do
     touch_in_project(files_mtime, "recompile", beam_file)
   end
 
-  # test "throws exception if not valid compiler option is set", %{files_mtime: files_mtime} do
-  #   beam_file = beam_file("compiler_opts", false)
-  #   touch_in_project(files_mtime, "compiler_opts", beam_file)
-  # end
-
   test "does notihing if non file is touched", %{files_mtime: files_mtime} do
     Mix.Project.in_project(:not_recompiles, "test/fixtures/not_recompiles", fn _module ->
       project_path = "test/fixtures/not_recompiles"
@@ -61,6 +56,15 @@ defmodule LettuceTest do
     refute ExUnit.CaptureLog.capture_log(fn ->
              touch_in_project(files_mtime, "silent_io", compiled_file)
            end) =~ "recompiling..."
+  end
+
+  test "nothing is logged if sil" do
+    assert_raise OptionParser.ParseError, fn ->
+      Mix.Project.in_project(:compiler_opts, "test/fixtures/compiler_opts", fn _module ->
+        Mix.Tasks.Loadconfig.run(["config/config.exs"])
+        Lettuce.Config.Compiler.options()
+      end)
+    end
   end
 
   defp beam_file(project, full_path?) do
@@ -97,7 +101,7 @@ defmodule LettuceTest do
     |> Mix.Project.in_project(project_path, fn _module ->
       Mix.Tasks.Loadconfig.run(["config/config.exs"])
 
-      Process.sleep(2500)
+      Process.sleep(1000)
       File.touch!("lib/module_file.ex")
 
       refute Map.get(initial_times, "#{project_path}/#{beam_file}") ==
