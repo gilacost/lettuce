@@ -5,7 +5,7 @@ defmodule LettuceTest do
 
   @ebin_path "_build/test/lib/{{project}}/ebin/"
   @compiled_file_pattern "Elixir.{{project}}.ModuleFile.beam"
-  @fixture_projects [:recompile, :silent_io]
+  @fixture_projects [:recompile, :silent_io, :not_recompiles]
                     |> Enum.map(&to_string(&1))
 
   setup_all do
@@ -36,17 +36,17 @@ defmodule LettuceTest do
   end
 
   test "recompiles the project if a file is touched", %{files_mtime: files_mtime} do
-    compiled_file = beam_file("recompile", false)
-    touch_in_project(files_mtime, "recompile", compiled_file)
+    beam_file = beam_file("recompile", false)
+    touch_in_project(files_mtime, "recompile", beam_file)
   end
 
-  test "does notihing if non file is touched" do
-    compiled_file = beam_file("recompile", false)
+  test "does notihing if non file is touched", %{files_mtime: files_mtime} do
+    Mix.Project.in_project(:not_recompiles, "test/fixtures/not_recompiles", fn _module ->
+      project_path = "test/fixtures/not_recompiles"
+      beam_file = beam_file("not_recompiles", false)
 
-    Mix.Project.in_project(:recompile, "test/fixtures/recompile", fn _module ->
-      init_mod_time = modification_time(compiled_file)
-
-      assert init_mod_time == modification_time(compiled_file)
+      assert Map.get(files_mtime, "#{project_path}/#{beam_file}") ==
+               modification_time(beam_file)
     end)
   end
 
@@ -85,15 +85,18 @@ defmodule LettuceTest do
   end
 
   defp touch_in_project(initial_times, project, beam_file) do
+    project_path = "test/fixtures/#{project}"
+
     project
     |> String.to_existing_atom()
-    |> Mix.Project.in_project("test/fixtures/#{project}", fn _module ->
+    |> Mix.Project.in_project(project_path, fn _module ->
       Mix.Tasks.Loadconfig.run(["config/config.exs"])
 
       Process.sleep(2000)
       File.touch!("lib/module_file.ex")
 
-      assert Map.get(initial_times, "#{beam_file}") != modification_time(beam_file)
+      refute Map.get(initial_times, "#{project_path}/#{beam_file}") ==
+               modification_time(beam_file)
     end)
   end
 end
