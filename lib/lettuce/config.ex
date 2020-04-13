@@ -45,9 +45,9 @@ defmodule Lettuce.Config do
   defmodule Compiler do
     defstruct verbose: :boolean,
               force: :boolean,
+              docs: :boolean,
               ignore_module_conflict: :boolean,
-              warnings_as_conflict: :boolean,
-              elixirc_paths: :list
+              warnings_as_errors: :boolean
 
     def options() do
       default = ["--verbose", "--ignore-module-conflict"]
