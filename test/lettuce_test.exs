@@ -5,7 +5,7 @@ defmodule LettuceTest do
 
   @ebin_path "_build/test/lib/{{project}}/ebin/"
   @compiled_file_pattern "Elixir.{{project}}.ModuleFile.beam"
-  @fixture_projects [:recompile, :silent_io, :not_recompiles]
+  @fixture_projects [:recompile, :silent_io, :not_recompiles, :compiler_opts]
                     |> Enum.map(&to_string(&1))
 
   setup_all do
@@ -39,6 +39,11 @@ defmodule LettuceTest do
     beam_file = beam_file("recompile", false)
     touch_in_project(files_mtime, "recompile", beam_file)
   end
+
+  # test "throws exception if not valid compiler option is set", %{files_mtime: files_mtime} do
+  #   beam_file = beam_file("compiler_opts", false)
+  #   touch_in_project(files_mtime, "compiler_opts", beam_file)
+  # end
 
   test "does notihing if non file is touched", %{files_mtime: files_mtime} do
     Mix.Project.in_project(:not_recompiles, "test/fixtures/not_recompiles", fn _module ->
@@ -92,7 +97,7 @@ defmodule LettuceTest do
     |> Mix.Project.in_project(project_path, fn _module ->
       Mix.Tasks.Loadconfig.run(["config/config.exs"])
 
-      Process.sleep(2000)
+      Process.sleep(2500)
       File.touch!("lib/module_file.ex")
 
       refute Map.get(initial_times, "#{project_path}/#{beam_file}") ==
