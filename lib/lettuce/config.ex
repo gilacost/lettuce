@@ -50,7 +50,8 @@ defmodule Lettuce.Config do
               elixirc_paths: :list
 
     def options() do
-      Application.get_env(:lettuce, :compiler_opts, ["--verbose"])
+      default = ["--verbose", "--ignore-module-conflict"]
+      Application.get_env(:lettuce, :compiler_opts, default)
     end
 
     def validations() do
