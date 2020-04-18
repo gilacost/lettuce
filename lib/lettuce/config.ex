@@ -43,13 +43,36 @@ defmodule Lettuce.Config do
   end
 
   defmodule Compiler do
+    @moduledoc """
+    This module defines the struct of options that are accepted by the
+    [Mix.Tasks.Compile.Elixir](https://github.com/elixir-lang/elixir/blob/v1.1.1/lib/mix/lib/mix/tasks/compile.elixir.ex#L1), for more information find the docs [here](https://hexdocs.pm/mix/1.1.1/Mix.Tasks.Compile.Elixir.html).
+
+    *NOTE*: --ignore-module-conflict is a requirement.
+
+    ## Example of parameters in config.exs:
+
+        compiler_opts: [
+          "--ignore-module-conflict",
+          "--docs"
+        ]
+    """
+
     @default ["--verbose", "--ignore-module-conflict"]
+
     defstruct verbose: :boolean,
               force: :boolean,
               docs: :boolean,
+              no_docs: :boolean,
+              debug_info: :boolean,
+              no_debug_info: :boolean,
               ignore_module_conflict: :boolean,
               warnings_as_errors: :boolean
 
+    @doc """
+    Options tries to validate the parameters defined in `config.exs`. It will
+    throw and exception if a parameter is invalid.
+    """
+    @spec options() :: [String.t()] | no_return
     def options() do
       opts = Application.get_env(:lettuce, :compiler_opts, @default)
       OptionParser.parse!(opts, strict: validations())
@@ -57,7 +80,13 @@ defmodule Lettuce.Config do
       opts
     end
 
-    defp validations() do
+    @doc """
+    Returns the validations defined in the module struct as a keyword because
+    that is whet the [OptionParser](https://hexdocs.pm/elixir/OptionParser.html)
+    expects.
+    """
+    @spec validations() :: keyword
+    def validations() do
       %__MODULE__{} |> Map.from_struct() |> Map.to_list()
     end
   end
