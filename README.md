@@ -1,5 +1,4 @@
 # Lettuce 🥬
-
 Lettuce is a generic server process that checks the files within an elixir
 project that has lettuce as a dependency and then runs `iex -S mix`. It
 initialises the state of the generic server with the `.ex` files inside `lib`
@@ -7,6 +6,8 @@ and their last modified time. By default `lib` is used but you may specify which
 folders you want to be watched.
 
 ![Elixir CI status](https://github.com/gilacost/lettuce/workflows/Elixir%20CI/badge.svg)&nbsp;[![Hex version badge](https://img.shields.io/hexpm/v/lettuce.svg)](https://hex.pm/packages/lettuce)&nbsp;[![codecov](https://codecov.io/gh/gilacost/lettuce/branch/master/graph/badge.svg)](https://codecov.io/gh/gilacost/lettuce)
+
+![](/priv/lettuce.jpg)
 
 ## Installation
 
@@ -17,7 +18,7 @@ by adding `lettuce` to your list of dependencies in `mix.exs`:
 ...
 def deps do
   [
-    {:lettuce, "~> 0.1.0", only: :dev}
+    {:lettuce, "~> 0.1.5", only: :dev}
   ]
 end
 ...
@@ -56,6 +57,23 @@ defp extra_applications(:dev, default), do: default ++ [:lettuce]
 defp extra_applications(_, default), do: default
 ...
 ```
+
+### Mix compiler task options
+
+You might send special parameters to the compiler task that lettuce runs. This
+is not required. In your project of parameters in config.exs:
+
+```elixir
+
+config :lettuce,
+  folders_to_watch: ["lib"],
+  compiler_opts: [
+    "--ignore-module-conflict",
+    "--verbose"
+  ]
+```
+
+For the available options check the [Mix.Tasks.Compile.Elixir](https://github.com/elixir-lang/elixir/blob/v1.1.1/lib/mix/lib/mix/tasks/compile.elixir.ex#L1) docs.
 
 ## Inspiration
 
