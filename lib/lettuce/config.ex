@@ -45,7 +45,8 @@ defmodule Lettuce.Config do
   defmodule Compiler do
     @moduledoc """
     This module defines the struct of options that are accepted by the
-    [Mix.Tasks.Compile.Elixir](https://github.com/elixir-lang/elixir/blob/v1.1.1/lib/mix/lib/mix/tasks/compile.elixir.ex#L1), for more information find the docs [here](https://hexdocs.pm/mix/1.1.1/Mix.Tasks.Compile.Elixir.html).
+    [Mix.Tasks.Compile.Elixir](https://github.com/elixir-lang/elixir/blob/v1.1.1/lib/mix/lib/mix/tasks/compile.elixir.ex#L1),
+    for more information find the docs [here](https://hexdocs.pm/mix/1.1.1/Mix.Tasks.Compile.Elixir.html).
 
     *NOTE*: --ignore-module-conflict is a requirement.
 

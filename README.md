@@ -1,28 +1,15 @@
 # Lettuce 🥬
+
+<!-- MDOC -->
+
 Lettuce is a generic server process that checks the files within an elixir
 project that has lettuce as a dependency and then runs `iex -S mix`. It
 initialises the state of the generic server with the `.ex` files inside `lib`
 and their last modified time. By default `lib` is used but you may specify which
 folders you want to be watched.
 
-![Elixir CI status](https://github.com/gilacost/lettuce/workflows/Elixir%20CI/badge.svg)&nbsp;[![Hex version badge](https://img.shields.io/hexpm/v/lettuce.svg)](https://hex.pm/packages/lettuce)&nbsp;[![codecov](https://codecov.io/gh/gilacost/lettuce/branch/master/graph/badge.svg)](https://codecov.io/gh/gilacost/lettuce)
+![Elixir CI status](https://github.com/gilacost/lettuce/workflows/Elixir%20CI/badge.svg)&nbsp;[![Hex version badge](https://img.shields.io/hexpm/v/lettuce.svg)](https://hex.pm/packages/lettuce)&nbsp;[![codecov](https://codecov.io/gh/gilacost/lettuce/branch/master/graph/badge.svg)](https://codecov.io/gh/gilacost/lettuce)![](/priv/lettuce.jpg)
 
-![](/priv/lettuce.jpg)
-
-## Installation
-
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `lettuce` to your list of dependencies in `mix.exs`:
-
-```elixir
-...
-def deps do
-  [
-    {:lettuce, "~> 0.1.5", only: :dev}
-  ]
-end
-...
-```
 ## Configuration example
 
 ```elixir
@@ -74,6 +61,23 @@ config :lettuce,
 ```
 
 For the available options check the [Mix.Tasks.Compile.Elixir](https://github.com/elixir-lang/elixir/blob/v1.1.1/lib/mix/lib/mix/tasks/compile.elixir.ex#L1) docs.
+
+<!-- MDOC -->
+
+## Installation
+
+If [available in Hex](https://hex.pm/docs/publish), the package can be installed
+by adding `lettuce` to your list of dependencies in `mix.exs`:
+
+```elixir
+...
+def deps do
+  [
+    {:lettuce, "~> 0.1.5", only: :dev}
+  ]
+end
+...
+```
 
 ## Inspiration
 
