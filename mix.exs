@@ -5,7 +5,7 @@ defmodule Lettuce.MixProject do
     [
       app: :lettuce,
       version: "0.1.5",
-      elixir: "~> 1.10.2",
+      elixir: "~> 1.13.2",
       start_permanent: Mix.env() == :prod,
       build_embedded: Mix.env() == :prod,
       deps: deps(),

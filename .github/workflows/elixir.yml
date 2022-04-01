@@ -1,14 +1,11 @@
 name: Elixir CI
 
 env:
-  ELIXIR_VERSION: 1.10.2
-  OTP_VERSION: 22.3
+  ELIXIR_VERSION: 1.13.2
+  OTP_VERSION: 24.2
 
 on:
-  push:
-    branches: [master]
-  pull_request:
-    branches: [master]
+  - push
 
 jobs:
   build:
