@@ -8,7 +8,11 @@ initialises the state of the generic server with the `.ex` files inside `lib`
 and their last modified time. By default `lib` is used but you may specify which
 folders you want to be watched.
 
-![Elixir CI status](https://github.com/gilacost/lettuce/workflows/Elixir%20CI/badge.svg)&nbsp;[![Hex version badge](https://img.shields.io/hexpm/v/lettuce.svg)](https://hex.pm/packages/lettuce)&nbsp;[![codecov](https://codecov.io/gh/gilacost/lettuce/branch/master/graph/badge.svg)](https://codecov.io/gh/gilacost/lettuce)![](/priv/lettuce.jpg)
+![Elixir CI status](https://github.com/gilacost/lettuce/workflows/Elixir%20CI/badge.svg)
+![Hex version badge](https://img.shields.io/hexpm/v/lettuce.svg)
+![codecov](https://codecov.io/gh/gilacost/lettuce/branch/master/graph/badge.svg)
+
+![lettuce](https://github.com/gilacost/lettuce/blob/master/priv/lettuce.jpg?raw=true)
 
 ## Configuration example
 
