@@ -18,6 +18,7 @@ use Mix.Config
 config :lettuce, folders_to_watch: ["apps"]
 ...
 ```
+
 You can also change the refresh time to control how often the project files
 will be checked.
 
@@ -28,6 +29,7 @@ config :lettuce, refresh_time: 1500
 ...
 
 ```
+
 Even though the `start_link` will throw an error if the `Mix.env` equals to
 `:dev` it is recommended to explicitly select the extra applications by
 environment in the mix file.
@@ -73,7 +75,7 @@ by adding `lettuce` to your list of dependencies in `mix.exs`:
 ...
 def deps do
   [
-    {:lettuce, "~> 0.1.5", only: :dev}
+    {:lettuce, "~> 0.2.0", only: :dev}
   ]
 end
 ...
