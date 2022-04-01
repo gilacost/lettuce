@@ -48,11 +48,11 @@ jobs:
       - name: Check Typespec
         run: mix dialyzer --halt-exit-status
 
-      # - name: Build Code Coverage Report
-      #   run: mix coveralls.json
+      - name: Build Code Coverage Report
+        run: mix coveralls.json
 
-      # - name: Upload Code Coverage Report
-      #   uses: codecov/codecov-action@v1
-      #   with:
-      #     token: ${{ secrets.CODECOV_TOKEN }}
-      #     file: ./cover/excoveralls.json
+      - name: Upload Code Coverage Report
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./cover/excoveralls.json
