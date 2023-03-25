@@ -104,6 +104,7 @@ defmodule LettuceTest do
       Mix.Tasks.Loadconfig.run(["config/config.exs"])
 
       Process.sleep(1100)
+
       File.touch!("lib/module_file.ex")
 
       refute Map.get(initial_times, "#{project_path}/#{beam_file}") ==
