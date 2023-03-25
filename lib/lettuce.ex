@@ -20,7 +20,6 @@ defmodule Lettuce do
   end
 
   # Server (callbacks)
-
   @impl true
   def init(_) do
     unless Config.silent?() do

@@ -5,7 +5,7 @@ defmodule Lettuce.Config do
   """
 
   @doc """
-  The time that lettuce will wait until project files reviews.
+  The time that lettuce will wait until next project files modified time review.
 
   ## Examples:
 
@@ -33,7 +33,7 @@ defmodule Lettuce.Config do
   end
 
   @doc """
-  Enables the output that lettuce generates to be able to check that is working.
+  Enables the output that lettuce produces for debugging purposes..
   This is enabled by default.
 
   """
@@ -56,6 +56,7 @@ defmodule Lettuce.Config do
           "--ignore-module-conflict",
           "--docs"
         ]
+
     """
 
     @default ["--verbose", "--ignore-module-conflict"]
@@ -71,12 +72,15 @@ defmodule Lettuce.Config do
 
     @doc """
     Options tries to validate the parameters defined in `config.exs`. It will
-    throw and exception if a parameter is invalid.
+    throw and exception if a parameter is invalid. Parsed parameters are 
+    ignored because the options are forwarded as strings to 
+    `Mix.Tass.Compile.Elixir`.
+
     """
     @spec options() :: [String.t()] | no_return
     def options() do
       opts = Application.get_env(:lettuce, :compiler_opts, @default)
-      OptionParser.parse!(opts, strict: validations())
+      {_parsed, _arg} = OptionParser.parse!(opts, strict: validations())
 
       opts
     end
@@ -85,10 +89,9 @@ defmodule Lettuce.Config do
     Returns the validations defined in the module struct as a keyword because
     that is whet the [OptionParser](https://hexdocs.pm/elixir/OptionParser.html)
     expects.
+
     """
     @spec validations() :: keyword
-    def validations() do
-      %__MODULE__{} |> Map.from_struct() |> Map.to_list()
-    end
+    def validations(), do: %__MODULE__{} |> Map.from_struct() |> Map.to_list()
   end
 end
