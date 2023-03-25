@@ -10,31 +10,35 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    name: OTP ${{matrix.otp}} / Elixir ${{matrix.elixir}}
+    strategy:
+      matrix:
+        otp: ["24", "25"]
+        elixir: ["1.11", "1.14"]
     steps:
       - uses: actions/checkout@v2
       - name: Setup elixir
         uses: erlef/setup-elixir@v1
         with:
-          elixir-version: ${{ env.ELIXIR_VERSION }} # Define the elixir version [required]
-          otp-version: ${{ env.OTP_VERSION }} # Define the OTP version [required]
+          elixir-version: ${{ matrix.elixir }}
+          otp-version: ${{ matrix.otp }}
 
       - name: Cache Dependencies
         uses: actions/cache@v1
         id: cache-deps
         with:
           path: deps
-          key: deps-${{ env.MIX_ENV }}-v${{ env.ELIXIR_VERSION }}-otp-${{ env.OTP_VERSION }}-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+          key: deps-${{ env.MIX_ENV }}-v${{ matrix.elixir }}-otp-${{ matrix.otp }}-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
           restore-keys: |
-            deps-${{ env.MIX_ENV }}-v${{ env.ELIXIR_VERSION }}-otp-${{ env.OTP_VERSION }}-
+            deps-${{ env.MIX_ENV }}-v${{ matrix.elixir }}-otp-${{ matrix.otp }}-
 
       - name: Cache Dialyzer PLTs
         uses: actions/cache@v1
         with:
           path: priv/plts
-          key: plts-${{ env.MIX_ENV }}-v${{ env.ELIXIR_VERSION }}-otp-${{ env.OTP_VERSION }}-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+          key: plts-${{ env.MIX_ENV }}-v${{ matrix.elixir }}-otp-${{ matrix.otp }}-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
           restore-keys: |
-            plts-v${{ env.ELIXIR_VERSION }}-otp-${{ env.OTP_VERSION }}-
+            plts-v${{ matrix.elixir }}-otp-${{ matrix.otp }}-
 
       - name: Install Dependencies
         run: mix deps.get
@@ -43,7 +47,7 @@ jobs:
         run: mix format --check-formatted
 
       - name: Run Tests
-        run: mix test
+        run: mix test --trace
 
       - name: Check Typespec
         run: mix dialyzer --halt-exit-status
