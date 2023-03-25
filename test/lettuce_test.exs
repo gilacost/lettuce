@@ -1,5 +1,5 @@
 defmodule LettuceTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   doctest Lettuce.Config
 
@@ -8,7 +8,7 @@ defmodule LettuceTest do
   @fixture_projects [:recompile, :silent_io, :not_recompiles, :compiler_opts]
                     |> Enum.map(&to_string(&1))
 
-  setup_all do
+  setup do
     files_mtime =
       @fixture_projects
       |> Enum.map(fn project ->
@@ -21,6 +21,8 @@ defmodule LettuceTest do
         {"#{beam_file}", modification_time(beam_file)}
       end)
       |> Enum.into(%{})
+
+    Process.sleep(1100)
 
     on_exit(fn ->
       @fixture_projects
@@ -58,7 +60,7 @@ defmodule LettuceTest do
            end) =~ "recompiling..."
   end
 
-  test "nothing is logged if sil" do
+  test "nothing is logged if nil" do
     assert_raise OptionParser.ParseError, fn ->
       Mix.Project.in_project(:compiler_opts, "test/fixtures/compiler_opts", fn _module ->
         Mix.Tasks.Loadconfig.run(["config/config.exs"])
@@ -101,7 +103,8 @@ defmodule LettuceTest do
     |> Mix.Project.in_project(project_path, fn _module ->
       Mix.Tasks.Loadconfig.run(["config/config.exs"])
 
-      Process.sleep(1500)
+      Process.sleep(1100)
+
       File.touch!("lib/module_file.ex")
 
       refute Map.get(initial_times, "#{project_path}/#{beam_file}") ==
