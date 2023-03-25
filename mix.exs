@@ -53,9 +53,9 @@ defmodule Lettuce.MixProject do
 
   defp deps do
     [
-      {:ex_doc, "~> 0.27", only: :dev, runtime: false},
-      {:excoveralls, "~> 0.14.4", only: :test},
-      {:dialyxir, "~> 1.0.0-rc.7", only: [:dev, :test], runtime: false}
+      {:ex_doc, "~> 0.29.3", only: :dev, runtime: false},
+      {:excoveralls, "~> 0.16.0", only: :test},
+      {:dialyxir, "~> 1.2.0", only: [:dev, :test], runtime: false}
     ]
   end
 

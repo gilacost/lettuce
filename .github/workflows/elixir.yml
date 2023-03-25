@@ -1,24 +1,33 @@
 name: Elixir CI
 
-env:
-  ELIXIR_VERSION: 1.13.2
-  OTP_VERSION: 24.2
-
 on:
   - push
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     name: OTP ${{matrix.otp}} / Elixir ${{matrix.elixir}}
     strategy:
       matrix:
-        otp: ["24", "25"]
-        elixir: ["1.11", "1.14"]
+        elixir:
+          - "1.11"
+          - "1.12"
+          - "1.13"
+          - "1.14"
+        otp:
+          - "23"
+          - "24"
+          - "25"
+        exclude:
+          - elixir: "1.11"
+            otp: "25"
+          - elixir: "1.12"
+            otp: "25"
+
     steps:
       - uses: actions/checkout@v2
       - name: Setup elixir
-        uses: erlef/setup-elixir@v1
+        uses: erlef/setup-beam@v1
         with:
           elixir-version: ${{ matrix.elixir }}
           otp-version: ${{ matrix.otp }}
