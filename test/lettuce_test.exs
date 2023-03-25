@@ -40,7 +40,7 @@ defmodule LettuceTest do
     touch_in_project(files_mtime, "recompile", beam_file)
   end
 
-  test "does notihing if non file is touched", %{files_mtime: files_mtime} do
+  test "does nothing if non file is touched", %{files_mtime: files_mtime} do
     Mix.Project.in_project(:not_recompiles, "test/fixtures/not_recompiles", fn _module ->
       project_path = "test/fixtures/not_recompiles"
       beam_file = beam_file("not_recompiles", false)
@@ -101,7 +101,7 @@ defmodule LettuceTest do
     |> Mix.Project.in_project(project_path, fn _module ->
       Mix.Tasks.Loadconfig.run(["config/config.exs"])
 
-      Process.sleep(1000)
+      Process.sleep(1500)
       File.touch!("lib/module_file.ex")
 
       refute Map.get(initial_times, "#{project_path}/#{beam_file}") ==
