@@ -55,7 +55,7 @@ defmodule Lettuce.MixProject do
     [
       {:ex_doc, "~> 0.30.0", only: :dev, runtime: false},
       {:excoveralls, "~> 0.17.0", only: :test},
-      {:dialyxir, "~> 1.2.0", only: [:dev, :test], runtime: false}
+      {:dialyxir, "~> 1.3.0", only: [:dev, :test], runtime: false}
     ]
   end
 
