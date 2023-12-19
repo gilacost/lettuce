@@ -79,7 +79,7 @@ by adding `lettuce` to your list of dependencies in `mix.exs`:
 ...
 def deps do
   [
-    {:lettuce, "~> 0.2.0", only: :dev}
+    {:lettuce, "~> 0.3.0", only: :dev}
   ]
 end
 ...
